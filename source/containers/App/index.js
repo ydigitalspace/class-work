@@ -15,7 +15,7 @@ export default class App extends Component {
                     fontSize:        24,
                     fontWeight:      '600',
                 }}>
-                Старт проекта!!!
+                Старт проекта наконец то!!!
             </h1>
         );
     }
