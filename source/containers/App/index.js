@@ -5,9 +5,17 @@ import { hot } from 'react-hot-loader';
 
 import Feed from 'components/Feed';
 
+import avatar from 'theme/assets/homer';
+
+const options = {
+    avatar,
+    currentUserFirstName: 'Man',
+    currentUserLastName: 'Simpson',
+}
+
 @hot(module)
 export default class App extends Component {
     render () {
-        return <Feed />;
+        return <Feed { ...options } />;
     }
 }
