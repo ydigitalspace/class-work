@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import avatar from 'theme/assets/lisa';
+import avatar from 'theme/assets/homer';
 import Styles from "./styles.m.css";
 import moment from 'moment';
 
