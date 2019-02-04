@@ -11,8 +11,8 @@ export const sum = (operand1, operand2) => {
 export const delay = (duration = 1000) => {
     return new Promise((resolve) => {
         setTimeout(resolve, duration);
-    });
-};
+    })
+}
 
 export const getUniqueID = (length = 15) => {
     if (typeof length !== 'number') {
