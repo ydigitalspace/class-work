@@ -17,6 +17,14 @@ export default class Post extends Component {
         likes: array.isRequired,
     };
 
+    _getCross = () => {
+        const { firstName, lastName, currentUserFirstName, currentUserLastName } = this.props;
+
+        return `${firstName} ${lastName}` === `${currentUserFirstName} ${currentUserLastName}`
+            ? <span className = { Styles.cross } onClick = { this._deletePost } /> 
+            : null;
+    }
+
     _deletePost = () => {
         const {id, _deletePost} = this.props;
         
@@ -24,14 +32,18 @@ export default class Post extends Component {
     }
 
     render () {
-        const { currentUserFirstName, currentUserLastName, avatar, comment, created, _likePost, id, likes} = this.props;
+        const { firstName, lastName, avatar, comment, created, _likePost, id, likes} = this.props;
+
+        //throw new Error();
+
+        const cross = this._getCross();
 
         return (
                 <section className = { Styles.post } >               
-                    <span className = { Styles.cross } onClick = { this._deletePost } />
+                   {cross}
                     <img src = { avatar } />
-                    <a>{`${currentUserFirstName} ${currentUserLastName}`}</a>                        
-                    <time>{moment.utc(created).format('MMMM D Y, H:mm:ss')}</time>
+                    <a>{`${firstName} ${lastName}`}</a>                        
+                    <time>{moment.unix(created).format('MMMM D Y, H:mm:ss')}</time>
                     <p>{comment}</p>
                     <Like id = { id }  likes = { likes } _likePost = { _likePost } />
                 </section>
