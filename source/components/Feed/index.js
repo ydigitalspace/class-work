@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { Transition, CSSTransition, TransitionGroup } from 'react-transition-group';
+import { fromTo } from 'gsap';
 
 import { withProfile } from 'components/HOC/withProfile' 
 import StatusBar from 'components/StatusBar';
 import Composer from 'components/Composer';
 import Post from 'components/Post';
 import Spinner from 'components/Spinner';
+import Postman from 'components/Postman';
 
 import Styles from "./styles.m.css";
 import { getUniqueID, delay } from 'instruments';
@@ -156,11 +159,42 @@ export default class Feed extends Component {
 
     }    
 
+    _animateComposerEnter = (composer) => {
+        fromTo(composer, 2, { opacity: 0}, { opacity: 1});
+    }
+
+    _animatePostmanEnter = (postman) => {
+        //fromTo(postman, 2, { opacity: 0, x: 600}, { opacity: 1, x: 0, onComplete: () => this._animatePostmanExit(postman)});
+        fromTo(postman, 5, { opacity: 0, x: 600}, { opacity: 1, x: 0});
+    }
+
+    _animatePostmanExit = (postman) => {
+        fromTo(postman, 5, { opacity: 1, x: 0}, { opacity: 0, x: 600});        
+    }
+
     render () {
         const { posts, isPostFetching } = this.state;
 
         const postsJSX = posts.map((post) => {
-            return <Post key = { post.id } {...post} _likePost = {this._likePost } _deletePost = {this._deletePost } />;
+            return (
+                <CSSTransition 
+                    key = { post.id }
+                    classNames = {{
+                        enter: Styles.postInStart,
+                        enterActive: Styles.postInEnd,
+                    }}
+                    timeout = {{
+                        enter: 500,
+                        exit: 400,
+                    }}>
+                    <Post  
+                        {...post} 
+                        _likePost = {this._likePost } 
+                        _deletePost = {this._deletePost } 
+                    />
+                </CSSTransition>
+                
+            );
         });
 
 
@@ -168,8 +202,27 @@ export default class Feed extends Component {
             <section className = { Styles.feed }>               
                 <Spinner isSpinning = { isPostFetching }/>
                 <StatusBar  />
-                <Composer _createPost = { this._createPost } />
-                {postsJSX}
+                <Transition
+                    in
+                    appear
+                    onEnter = { this._animateComposerEnter }
+                    timeout = { 1000 }
+                    >
+                    <Composer _createPost = { this._createPost } />
+                </Transition>
+                
+                <Transition
+                    in
+                    appear
+                    timeout = { 10000 }
+                    onEntering = { this._animatePostmanEnter }
+                    onEntered = { this._animatePostmanExit }
+                    >
+                    <Postman />
+                </Transition>
+                <TransitionGroup>
+                    {postsJSX}
+                </TransitionGroup>
             </section>                                        
         );
     } 
